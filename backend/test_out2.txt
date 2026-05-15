@@ -1,0 +1,40 @@
+C:\Users\manoj\anaconda3\lib\site-packages\google\api_core\_python_version_support.py:266: FutureWarning: You are using a Python version (3.10.13) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+
+[DEBUG-ORCHESTRATOR] === Starting Pipeline === 
+[DEBUG-ORCHESTRATOR] Input: dummy2.jpg
+[DEBUG-ORCHESTRATOR] Sensors: {'temperature': 25}
+[DEBUG-ORCHESTRATOR] 1/8 Initializing ImageContext...
+[DEBUG-ORCHESTRATOR] Context initialized.
+[DEBUG-ORCHESTRATOR] 2/8 Running Scene Analysis...
+[DEBUG-ORCHESTRATOR] Scene Analysis Complete: Rain=False
+[DEBUG-ORCHESTRATOR] 3/8 Running CNN Inference...
+[DEBUG-ORCHESTRATOR] CNN Result: Tomato_Early_blight
+[DEBUG-ORCHESTRATOR] 4/8 Running Visual Severity Analysis...
+[DEBUG-ORCHESTRATOR] Severity: healthy_appearing
+[DEBUG-ORCHESTRATOR] 5/8 Running Morphology Routing...
+[DEBUG-MORPHOLOGY] Routing for: Tomato_Early_blight
+[DEBUG-MORPHOLOGY] Report from EarlyBlight: Score=0.5
+[DEBUG-ORCHESTRATOR] Morphology: EarlyBlight
+[DEBUG-ORCHESTRATOR] 6/8 Running Climate Context & Sensor Mapping...
+[DEBUG-ORCHESTRATOR] Sensors Mapped: SensorReading(temperature=25.0, humidity=50.0, soil_moisture=30.0, rainfall_mm=0.0, climate_zone=<ClimateZone.TROPICAL: 'tropical'>)
+[DEBUG-ORCHESTRATOR] 7/8 Running Confidence Calibration...
+[CRITICAL-ORCHESTRATOR] Reasoning Pipeline Failed: list index out of range
+Traceback (most recent call last):
+  File "C:\Users\manoj\Desktop\n8n\DT_prototype\web app\harvestsheild\backend\reasoning_orchestrator.py", line 127, in process_request
+    calibration = self.calibrator.calibrate(
+  File "C:\Users\manoj\Desktop\n8n\DT_prototype\web app\harvestsheild\backend\confidence_calibration.py", line 151, in calibrate
+    healthy_prob = temp_scaled_probs[HEALTHY_INDEX]
+IndexError: list index out of range
+[DEBUG-ORCHESTRATOR] Validating response contract for: Tomato_Early_blight
+[WARNING-ORCHESTRATOR] Missing required field: reliability_score. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: severity. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: visual_severity. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: severity_index. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: realism_score. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: is_healthy. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: recommendations. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: visual_match. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: env_support. Applying default.
+[WARNING-ORCHESTRATOR] Missing required field: technical_details. Applying default.
+RESULT: {'status': 'success', 'prediction': 'Tomato_Early_blight', 'diagnosis': 'Tomato_Early_blight', 'overall_confidence': 90.0, 'confidence': 90.0, 'reliability': 'Direct CNN Output (Fallback)', 'banner_color': 'amber', 'farmer_summary': 'Direct analysis suggests Tomato Early blight. System reasoning was limited.', 'concise_explanation': 'Reasoning engine encountered an error. Falling back to raw neural network classification.', 'technical_chain': ['Orchestrator fallback triggered due to internal error'], 'image_reliability': 'Unknown', 'environmental_support': 'None (Fallback)', 'visual_detection_confidence': 90.0, 'warnings': ['Reasoning system error - results may be less reliable'], 'recommendation': 'Consult an expert for confirmation as the reasoning logic was bypassed.', 'raw_metrics': {'sensor_readings': {'temperature': 25.0, 'humidity': 50.0, 'soil_moisture': 30.0, 'rainfall': 0.0}, 'quality_report': {'blur_score': 0, 'brightness_score': 0, 'leaf_visibility': 0, 'texture_clarity': 0}, 'severity_report': {'lesion_area_pct': 0, 'severity_level': 'healthy_appearing', 'realism_score': 0}, 'climate_context': {'zone': 'Unknown', 'weather_source': 'Offline'}, 'calibration_report': {'entropy': 0, 'margin': 0, 'disease_presence': 0}}, 'fallback_mode': True, 'reliability_score': 0.0, 'severity': 'Unknown', 'visual_severity': 'Unknown', 'severity_index': 0.0, 'realism_score': 0.0, 'is_healthy': False, 'recommendations': [], 'visual_match': 'Unknown', 'env_support': 'Unknown', 'technical_details': {'morphology': {'method': 'None', 'match_score': 0, 'signatures': []}, 'scene': {'rain': False, 'fog': False, 'wetness': 0, 'blur_type': 'none'}, 'consistency': {'status': 'Unverified', 'logs': []}}}
