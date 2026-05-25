@@ -3,3 +3,4 @@ flask-cors
 pillow
 numpy
 tensorflow
+opencv-python-headless

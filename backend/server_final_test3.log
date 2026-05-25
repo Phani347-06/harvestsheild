@@ -1,0 +1,36 @@
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1779687999.621981  450055 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+I0000 00:00:1779687999.699304  450055 cpu_feature_guard.cc:227] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1779688001.747859  450055 cudart_stub.cc:31] Could not find cuda drivers on your machine, GPU will not be used.
+E0000 00:00:1779688002.191219  450055 cuda_platform.cc:52] failed call to cuInit: INTERNAL: CUDA error: Failed call to cuInit: UNKNOWN ERROR (303)
+Keras version: 3.14.1
+Loading model from /app/backend/harvest_model.h5...
+Model loaded successfully!
+>>> STARTING FLASK SERVER ON PORT 5005
+ * Serving Flask app 'app'
+ * Debug mode: off
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5005
+ * Running on http://192.168.0.2:5005
+[33mPress CTRL+C to quit[0m
+127.0.0.1 - - [25/May/2026 05:47:12] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [25/May/2026 05:47:43] "GET /api/health HTTP/1.1" 200 -
+
+>>> RECEIVED DETECTION REQUEST
+[DEBUG-APP] Raw Sensors: {"temperature": 30, "humidity": 70, "soil_moisture": 50}
+[DEBUG-APP] Raw Location: {"latitude": 17.385, "longitude": 78.486}
+[DEBUG-APP] Extracted Sensors -> Temp: 30.0, Hum: 70.0, Soil: 50.0
+
+[DEBUG-ORCHESTRATOR] === Starting Pipeline ===
+[DEBUG-ORCHESTRATOR] Input: /tmp/tmpwmfkdypq.jpg
+[DEBUG-ORCHESTRATOR] Sensors: {'temperature': 30.0, 'humidity': 70.0, 'soil': 50.0}
+[DEBUG-ORCHESTRATOR] 1/8 Initializing ImageContext...
+[DEBUG-ORCHESTRATOR] Context initialized.
+[DEBUG-ORCHESTRATOR] 2/8 Running Scene Analysis...
+[DEBUG-ORCHESTRATOR] Scene Analysis Complete: Rain=False
+[DEBUG-ORCHESTRATOR] 3/8 Running CNN Inference...
+[1m1/1[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 1s/step[1m1/1[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 1s/step
+127.0.0.1 - - [25/May/2026 05:47:44] "POST /api/detect HTTP/1.1" 200 -

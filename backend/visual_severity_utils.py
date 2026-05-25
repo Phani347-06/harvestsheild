@@ -18,6 +18,7 @@ import cv2
 import numpy as np
 from dataclasses import dataclass
 from typing import Optional, Dict, Any
+from image_context import ImageContext
 
 
 @dataclass
@@ -66,16 +67,22 @@ class VisualSeverityAnalyzer:
     THRESHOLD_MODERATE = 15.0
     THRESHOLD_SEVERE = 35.0
 
-    def __init__(self, image_path: Optional[str] = None, image_array: Optional[np.ndarray] = None):
-        if image_array is not None:
+    def __init__(self, image_path: Optional[str] = None, image_array: Optional[np.ndarray] = None, image_ctx: Optional[ImageContext] = None):
+        if image_ctx is not None:
+            self.image = image_ctx.original_bgr
+            self.ctx = image_ctx
+        elif image_array is not None:
             self.image = image_array
+            self.ctx = None
         elif image_path is not None:
             self.image = cv2.imread(image_path)
+            self.ctx = None
             if self.image is None:
                 raise ValueError(f"Could not read image at {image_path}")
         else:
             # Placeholder for orchestrator late-binding
             self.image = None
+            self.ctx = None
             
         if self.image is not None:
             self._init_representations()
@@ -86,10 +93,21 @@ class VisualSeverityAnalyzer:
         self.h, self.w = self.gray.shape[:2]
         self.total_pixels = self.h * self.w
 
-    def analyze_severity(self, image_array: np.ndarray) -> Dict[str, Any]:
-        """Convenience method for orchestrator to analyze a raw BGR array."""
-        self.image = image_array
-        self._init_representations()
+    def analyze_severity(self, image_array: Optional[np.ndarray] = None, image_ctx: Optional[ImageContext] = None) -> Dict[str, Any]:
+        """Convenience method for orchestrator to analyze a raw BGR array or ImageContext."""
+        if image_ctx is not None:
+            self.image = image_ctx.original_bgr
+            self.ctx = image_ctx
+            self.hsv = image_ctx.hsv
+            self.gray = image_ctx.gray
+            self.h, self.w = self.gray.shape[:2]
+            self.total_pixels = self.h * self.w
+        elif image_array is not None:
+            self.image = image_array
+            self._init_representations()
+        elif self.image is None:
+             raise ValueError("No image provided for severity analysis")
+
         report = self.analyze()
         
         # Convert dataclass to dict for easier JSON serialization in orchestrator

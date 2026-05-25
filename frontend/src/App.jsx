@@ -241,7 +241,7 @@ function App() {
                 </p>
               </div>
 
-              <div><strong>Diagnosis:</strong> {String(result.prediction || result.diagnosis || 'Unknown').replace(/_/g, ' ')}</div>
+              <div><strong>Diagnosis:</strong> {(result.prediction || result.diagnosis || 'Unknown').toString().replace(/_/g, ' ')}</div>
               <div><strong>Reliability:</strong> <span style={{
                 color: (result.banner_color === 'green' ? '#34d399' :
                   result.banner_color === 'amber' ? '#fbbf24' :
