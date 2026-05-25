@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from image_context import ImageContext
 
 class ImageDiagnostics:
     """
@@ -7,12 +8,17 @@ class ImageDiagnostics:
     Analyzes multiple dimensions of image quality to support probabilistic fusion.
     """
 
-    def __init__(self, image_path):
-        self.image = cv2.imread(image_path)
-        if self.image is None:
-            raise ValueError(f"Could not read image at {image_path}")
-        self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        self.hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
+    def __init__(self, image_or_ctx):
+        if isinstance(image_or_ctx, ImageContext):
+            self.image = image_or_ctx.original_bgr
+            self.gray = image_or_ctx.gray
+            self.hsv = image_or_ctx.hsv
+        else:
+            self.image = cv2.imread(image_or_ctx)
+            if self.image is None:
+                raise ValueError(f"Could not read image at {image_or_ctx}")
+            self.gray = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+            self.hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
 
     def analyze_blur(self):
         """Variance of Laplacian for sharpness."""
@@ -92,7 +98,7 @@ class ImageDiagnostics:
         }
 
 
-def analyze_image_quality(image_path):
+def analyze_image_quality(image_or_ctx):
     """Convenience wrapper for the ImageDiagnostics class."""
-    diag = ImageDiagnostics(image_path)
+    diag = ImageDiagnostics(image_or_ctx)
     return diag.get_quality_report()

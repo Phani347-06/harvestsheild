@@ -87,7 +87,7 @@ class HierarchicalOrchestrator:
             
             # ── Step 3: Visual Severity & Realism ──
             print("[DEBUG-ORCHESTRATOR] 4/8 Running Visual Severity Analysis...")
-            severity_report = self.severity_analyzer.analyze_severity(ctx.original_bgr)
+            severity_report = self.severity_analyzer.analyze_severity(image_ctx=ctx)
             print(f"[DEBUG-ORCHESTRATOR] Severity: {severity_report['severity_level']}")
             
             # ── Step 4: Morphology Routing ──
@@ -120,7 +120,7 @@ class HierarchicalOrchestrator:
             )
             print(f"[DEBUG-ORCHESTRATOR] Sensors Mapped: {sensor_reading}")
             
-            quality_report = analyze_image_quality(image_path)
+            quality_report = analyze_image_quality(ctx)
             
             # Run Calibration
             print("[DEBUG-ORCHESTRATOR] 7/8 Running Confidence Calibration...")
@@ -377,8 +377,14 @@ class HierarchicalOrchestrator:
         try:
             from model_utils import predict_image
             import cv2
+            import numpy as np
             img = cv2.imread(image_path)
-            res = predict_image(self.model, cv2.resize(img, (224, 224)))
+            # Resize and convert to RGB for consistency with ImageContext
+            resized = cv2.resize(img, (224, 224))
+            rgb = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
+            normalized = rgb.astype(np.float32) / 255.0
+            batched = np.expand_dims(normalized, axis=0)
+            res = predict_image(self.model, batched)
             
             label = res['prediction']
             conf = res['confidence_score']

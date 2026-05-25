@@ -20,7 +20,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The API will run at `http://localhost:5000`.
+The API will run at `http://localhost:5005`.
 
 ## Frontend
 
@@ -44,4 +44,4 @@ Open the displayed Vite URL, typically `http://localhost:5173`.
 
 - The backend currently uses a mock CNN placeholder. Replace `harvest_model.h5` and the placeholder logic in `backend/model_utils.py` with your real model.
 - The frontend sends image, sensor and location data to the backend endpoint `/api/detect`.
-- If needed, update `frontend/src/App.jsx` to point to a deployed backend URL instead of `http://localhost:5000`.
+- If needed, update `frontend/src/App.jsx` to point to a deployed backend URL instead of `http://localhost:5005`.

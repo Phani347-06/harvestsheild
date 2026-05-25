@@ -3,14 +3,14 @@ import json
 
 try:
     print("Testing health check...")
-    response = requests.get("http://localhost:5001/", timeout=5)
+    response = requests.get("http://localhost:5005/api/health", timeout=5)
     print(f"Health check status: {response.status_code}")
     print(f"Health check body: {response.json()}")
 except Exception as e:
     print(f"Health check failed: {e}")
 
-url = "http://localhost:5001/api/detect"
-image_path = "test_detect.jpg"
+url = "http://localhost:5005/api/detect"
+image_path = "../test_detect.jpg"
 
 data = {
     "sensors": json.dumps({"temperature": 30, "humidity": 70, "soil_moisture": 50}),
