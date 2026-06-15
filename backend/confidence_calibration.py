@@ -14,6 +14,7 @@ Techniques:
 """
 
 import math
+import numpy as np
 from dataclasses import dataclass, field
 from typing import List, Dict, Optional
 
@@ -307,16 +308,18 @@ class ConfidenceCalibrator:
         """
         Apply temperature scaling to soften peaked softmax distributions.
         """
+        # Convert to numpy array
+        probs_arr = np.array(probs, dtype=np.float64)
         eps = 1e-10
-        log_probs = [math.log(max(p, eps)) for p in probs]
-        scaled = [lp / temp for lp in log_probs]
         
-        # Stable softmax
-        max_s = max(scaled)
-        exp_scaled = [math.exp(s - max_s) for s in scaled]
-        total = sum(exp_scaled)
+        # Apply eps lower bound safely
+        p_safe = np.maximum(probs_arr, eps)
         
-        return [e / total for e in exp_scaled]
+        # Optimize math: exp(log(p_safe) / temp) is mathematically equivalent to p_safe ** (1.0 / temp)
+        scaled_exp = p_safe ** (1.0 / temp)
+
+        # Normalize and convert back to list
+        return (scaled_exp / np.sum(scaled_exp)).tolist()
 
     def _compute_entropy(self, probs: List[float]) -> float:
         """Shannon entropy of the probability distribution."""
