@@ -10,7 +10,7 @@ v2: Semantic consistency rules prevent contradictory outputs like
     distinguish between image quality and disease visibility.
 """
 
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List
 
 
 class ExplanationEngine:
